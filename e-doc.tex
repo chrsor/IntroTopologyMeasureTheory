@@ -1,0 +1,230 @@
+\documentclass[11pt,english]{smfart}
+
+\usepackage[T1]{fontenc}
+\usepackage[english,francais]{babel}
+
+\usepackage{amssymb,url,xspace,smfthm}
+\usepackage{tikz}
+
+\def\meta#1{$\langle${\it #1}$\rangle$}
+\newcommand{\myast}{($\star$)\ }
+%\makeatletter
+ %   \def\ps@copyright{\ps@empty
+  %  \def\@oddfoot{\hfil\small\copyright 2023, Friedrich-Alexander-Universität Erlangen-Nürnberg}}
+%\makeatother
+
+\newcommand{\SmF}{Soci\'et\'e ma\-th\'e\-ma\-ti\-que de France}
+\newcommand{\SMF}{Soci\'et\'e Ma\-th\'e\-Ma\-ti\-que de France}
+\newcommand{\BibTeX}{{\scshape Bib}\kern-.08em\TeX}
+\newcommand{\T}{\S\kern .15em\relax }
+\newcommand{\AMS}{$\mathcal{A}$\kern-.1667em\lower.5ex\hbox
+        {$\mathcal{M}$}\kern-.125em$\mathcal{S}$}
+\newcommand{\resp}{\emph{resp}.\xspace}
+\newcommand*{\QEDB}{\null\nobreak\hfill\ensuremath{\square}}
+
+\tolerance 400
+\pretolerance 200
+
+
+\title{Einführung in die Topologie}
+\date {Oktober 2023}
+\author{Christopher Sorg}
+
+\address{Department of mathematics, Friedrich-Alexander-Universität Erlangen-Nürnberg\\
+Cauerstraße 11\\
+91058 Erlangen\\
+Germany}
+\email{chr.sorg@fau.de}
+%\urladdr{http://smf.emath.fr/}
+\keywords{Topology, Measure Theory}
+
+\begin{document}
+\def\smfbyname{}
+
+\begin{abstract}
+Dieses Dokument dient den neugierigen Studenten unter euch, eine Einführung in die Topologie zu geben, um am Ende als Anwendung die allgemeine Borelsche \(\sigma\)-Algebra einzuführen.
+\end{abstract}
+\maketitle
+
+\tableofcontents
+
+\section{Topologie}
+\subsection{Grundlagen}
+Moralische Grundprobleme lösen wir alltäglich mithilfe unserer Intuition. Doch kaum werden diese Probleme komplizierter, so fällt es uns immer schwerer, einen einheitlichen Pfad zu wählen und uns nicht von emotionalen Entscheidungen leiten zu lassen. Dieses Problem tritt auch in der axiomatischen Mathematik auf:\\
+Betrachten wir eine Eigenschaft \(\mathcal{E}\) in Analysis 1-2, so nutzen wir die spezifischen Eigenschaften der metrischen Räume, um \(\mathcal{E}\) erklären/beweisen zu können. Damit bleibt uns aber nichts anderes übrig, als jedes mal so spezifisch zu verfahren. Haben wir damit \(\mathcal{E}\) wirklich verstanden? Viel mehr nutzen wir die Struktur metrischer Räume und bauen beispielsweise bestehende Folgenargumente wie Lego zusammen zu einem größeren Werk.\\
+Die Topologie hat den Ansatz, sich ein Minimum an wichtigen Begriffen zu bedienen und damit Eigenschaften zu erklären. Auf einer solch abstrakten Ebene können wir sehr allgemeine Theorien entwickeln, die nur sehr gering von der Struktur der eigentlichen Räume abhängen. Eine Topologie definiert sich dann wie folgt:\\[0.5cm]
+\textbf{Definition 1.1 (Topologie):} Sei \(X\) eine Menge. Dann nennen wir \(\mathcal{T} \subseteq \mathcal{P}(X)\) eine Topologie auf \(X\) \(: \Leftrightarrow\)
+\begin{itemize}
+    \item (T1) \(\emptyset, X \in \mathcal{T}\),
+    \item (T2) Für eine Indexmenge \(J \neq \emptyset\) gilt \(\forall j \in J : \, (A_j \in \mathcal{T} \Rightarrow \bigcup_{j \in J} A_j \in \mathcal{T})\),
+    \item (T3) Für \(N \in \mathbb{N}\) gilt \(\forall n \in \{1,..,N\}: (A_n \in \mathcal{T} \Rightarrow \bigcap_{n=1}^N A_n \in \mathcal{T})\).
+\end{itemize}
+Allgemeine Konvention für Wohldefiniertheit: Ist \(J = \emptyset\), dann seien \(\bigcap_{j \in J} A_j := X, \, \bigcup_{j \in \emptyset} A_j := \emptyset\). Den zugehörigen Raum \((X,\mathcal{T})\) nennen wir dann topologischen Raum.\\
+
+\textbf{Bemerkung:} Es ist wichtig, dass wir in (T3) nur endliche Schnitte zulassen, ein Gegenbeispiel erfolgt nach Satz 1.3.\\
+
+Das anfangs angesprochene Minimum "beschränkt" (Achtung, der Beschränktheitsbegriff aus metrischen Räumen ergibt in topologischen Räumen keinen Sinn!) sich auf offene Menge und dessen "Nähe" zueinander. Die Topologie ist hierbei auch das Mengensystem der offenen Mengen, denn wir setzen fest:
+\begin{equation}
+    (A \in \mathcal{P}(X) \text{ offen (in }X \text{) } :\Leftrightarrow A \in \mathcal{T}).
+\end{equation}
+Diese Begrifflichkeiten reichen schon aus, um Topologien partiell zu ordnen, denn wir können die standard partielle Ordnungsrelation von Mengen übertragen:
+\begin{equation}
+    (\mathcal{T}_1 \text{ ist feiner (gröber) als }\mathcal{T}_2 \, :\Leftrightarrow \mathcal{T}_1 \supseteq (\subseteq) \mathcal{T}_2),
+\end{equation}
+wobei \(\mathcal{T}_1, \, \mathcal{T}_2\) Topologien auf \(X\) seien.\\[0.5cm]
+\textbf{Beispiel 1.2:} Direkt aus der Definition einer Topologie sind folgende zwei (im Allgemeinen nutzlose) Extremfälle valide:
+\begin{enumerate}
+    \item \(\mathcal{T} := \{\emptyset,X\}\) (Indiskrete Topologie; gröbste Topologie auf \(X\)),
+    \item \(\mathcal{T} := \mathcal{P}(X)\) (Diskrete Topologie; feinste Topologie auf \(X\)).
+\end{enumerate}
+
+Viel interessanter ist das folgende Beispiel, das auch - ohne es zu benennen - sehr breit diskutiert und angewandt wurde in der Analysis 1 und 2:\\[0.5cm]
+\textbf{Satz und Definition 1.3 (Euklidische Topologie):} Jeder metrische Raum \((X,d_{X})\) ist auch ein topologischer Raum \((X,\mathcal{T}_{ecl})\), wobei
+\begin{equation}
+    \mathcal{T}_{ecl} := \{A \in \mathcal{P}(X) \, | \, \forall x \in A \exists \epsilon > 0 \, : \, B_{\epsilon}(x) \subseteq A\}.
+\end{equation}
+Diese Topologie \(\mathcal{T}_{ecl}\) nennt man auch euklidische Topologie (Der Name entspringt der Natürlichkeit dieser Topologie in euklidischen Räumen.).\\[0.5cm]
+\textsc{Beweis:} Siehe Satz 4.6 in Analysis 1 (Lechner, WiSe 2022/23). \QEDB
+
+\textbf{Bemerkung:} Mithilfe dieses Rahmens lässt sich ein einfaches Gegenbeispiel konstruieren für unsere noch offene Frage, ob wir in (T3) auch beliebige Schnitte zulassen können:\\
+Wir haben in Analysis 1-2 bereits gesehen, dass Intervalle \(]a,b[\) für \(a < b\) in \(\mathbb{R}\) offene Mengen sind. Diese Offenheit war selbstverständlich bezüglich der euklidischen Topologie zu verstehen. Nun ist aber:
+\begin{equation}
+    \bigcap_{n=1}^{\infty} ]-\frac{1}{n},\frac{1}{n}[ = \{0\}
+\end{equation}
+nicht in \(\mathcal{T}_{ecl}\), da wir \(\epsilon = 0\) wählen müssten.\\
+
+Damit wir topologische Räume analysieren können, verallgemeinern wir nun verallgemeinbare wichtige Eigenschaften für Funktionen. Dabei müssen wir uns einschränken, denn Eigenschaften, wie Beschränktheit, die an eine Metrik gebunden sind, ergeben natürlich keinen Sinn in topologischen Räumen:\\[0.5cm]
+\textbf{Definition 1.4 (Grundlegende topologische Begriffe):} Sei \((X,\mathcal{T})\) ein topologischer Raum, \(A \subseteq X, \, x \in X\). Dann definieren wir:
+\begin{enumerate}
+    \item (\(A\) abgeschlossen \(:\Leftrightarrow\) \(A^c\) ist offen),
+    \item (\(U \subseteq X\) Umgebung von \(x \, :\Leftrightarrow \exists B \in \mathcal{T} \, : \, x \in B \subseteq U\)),
+    \item (\((X,\mathcal{T})\) ist ein (T2)-Raum (oder auch Hausdorff-Raum) \(:\Leftrightarrow \forall x,y \in X, \, x \neq y \, \exists \text{ Umgebungen }U_x,U_y \, : \, U_x \cap U_y = \emptyset\)),
+    \item (x Randpunkt von \(A\) \(:\Leftrightarrow \forall \text{ Umgebungen }U_x: \, U \cap A \neq \emptyset, \, U \cap A^c \neq \emptyset\)).
+    \item Inneres \(A^{\circ} := A \textbackslash \partial A\),
+    \item Abschluss \(\bar{A} := A \cup \partial A\),
+    \item (\(A\) dicht in \(X \, :\Leftrightarrow \bar{A} = X\)).
+\end{enumerate}
+
+\textbf{Bemerkung:} 
+\begin{itemize}
+    \item Die Vorstellung, dass Offenheit den gegensätzlichen Begriff zu Abgeschlossenheit in topologischen Räumen darstellt, ist falsch. Zwei einfache Gegenbeispiele sind \(\emptyset, \, X\), denn diese Menge sind bezüglich jeder Topologie offen \textbf{und} abgeschlossen.
+    \item Es ist in (1.) nicht gefordert, dass \(A^c\) bezüglich \(\mathcal{T}\) offen ist und das ist im Allgemeinen auch nicht sinnvoll. Generell versteht man Offenheit einer Teilmenge eines topologischen Raumes als Offenheit bezüglich der Teilraumtopologie (oder auch Relativtopologie):
+    \begin{equation}
+        \mathcal{T}_{sub} := \{A \cap B \, | \, A \subseteq X, \, B \in \mathcal{T}\}.
+    \end{equation}
+    \item Jeder metrische Raum \((X,d_X)\) ist (T2). Wähle hierzu Bälle \(B_{\epsilon}(x), \, B_{\epsilon}(y)\) als Umgebungen mit Radius \(\epsilon := \frac{d_X(x,y)}{2}\).
+    \item Erinnern wir uns an (4). Diese singulären Mengen sind nicht nur nicht offen, sie sind in (T2)-Räumen stets abgeschlossen. Der Beweis ist trivial, denn die Hausdorff-Eigenschaft impliziert sofort die Offenheit des Komplements der singulären Menge.\\
+\end{itemize}
+
+\textbf{Beispiel 1.5:} Betrachte:
+\begin{equation}
+    X = (\mathbb{R} \, \dot{\cup} \, \mathbb{R}) / \sim,
+\end{equation}
+wobei \((x,1) \, \sim \, (x,2)\) für alle \(x \neq 0\). Wir betrachten also \(\mathbb{R} \textbackslash \{0\} \, \cup \{p,q\}\) mit \(p \neq q\) (Beachte, dass \(p\) und \(q\) keine reellen Zahlen sind!). Sei nun \(a > 0\). Dann ist (leicht nachzuweisen):
+\begin{equation}
+    X = (\bigcup_{a > 0} ]-a,0[ \cup \{p\} \cup ]0,a[) \cup (\bigcup_{a > 0} ]-a,0[ \cup \{q\} \cup ]0,a[.
+\end{equation}
+Damit kann \(X\) nicht (T2) sein: Betrachte Umgebungen \(U_p, \, U_q\) und \(a,b > 0, \, a \neq b\). Wäre \(X\) (T2), müssten \(]-a,0[ \cup \{p\} \cup ]0,a[\) und \(]-b,0[ \cup \{q\} \cup ]0,b[\) disjunkt sein, was nach Definition falsch ist.
+\begin{figure}[ht!]
+    \centering
+\begin{tikzpicture}
+    \draw (-3,0) -- (-0.2,0);
+    \draw (0.2,0) -- (3,0);
+    \coordinate [label=right:$p$] (p) at (0,0.5);
+    \coordinate [label=right:$q$] (q) at (0,-0.5);
+    \fill (p) circle (2pt);
+    \fill (q) circle (2pt);
+\end{tikzpicture}
+    \caption{\(X\) als Linie mit "zwei Ursprüngen"}
+    \label{fig:linetwoorg}
+\end{figure}
+
+Bevor wir uns sinnvoll mit Konvergenz, Stetigkeit und Kompaktheit auseinander setzen können, sollten wir hier eine weitere wichtige Unterscheidung zwischen Eigenschaften \(\mathcal{E}\) und dessen Folgenversion \(\mathcal{E}_F\) in topologischen Räumen aufführen. Wie wir nämlich sehen werden, sind diese \textbf{nicht} äquivalent im Allgemeinen, jedoch findet sich eine passende Charakterisierung für Fälle, in denen diese Äquivalenz gilt. Überlegungen hierzu führen auf die sogenannten Abzählbarkeitsaxiome. Dafür führen wir zunächst die topologische Version einer Basis ein:\\[0.5cm]
+\textbf{Definition 1.6 (Basen):} Sei \((X,\mathcal{T})\) ein topologischer Raum. Für \(\mathbb{B} \subseteq \mathcal{T}\) und \(\mathcal{N}_x \subseteq \mathcal{P}(X)\) definieren wir:
+\begin{enumerate}
+    \item (\(\mathbb{B}\) ist eine Basis für \(\mathcal{T} \, :\Leftrightarrow \mathcal{T} = \{\bigcup_{j \in J} B_j \, | \, B_j \in \mathbb{B}, J \text{ Indexmenge}\}\)),
+    \item (\(\mathbb{B}\) ist eine Subbasis für \(\mathcal{T} \, :\Leftrightarrow \{\bigcap_{n=1}^N B_n \, | \, B_n \in \mathbb{B}, n \in \mathbb{N}\}\) ist eine Basis für \(\mathcal{T}\)),
+    \item (\(\mathcal{N}_x\) ist eine Umgebungsbasis von \(x \in X \, :\Leftrightarrow (\forall A \in \mathcal{N}_x \, : \, A \text{ ist eine Umgebung von }x \, \land \, \forall \text{ Umgebungen }U \text{ von }x \, \exists A \in \mathcal{N}_x \, : \, A \subseteq U)\)). 
+\end{enumerate}
+
+\textbf{Bemerkung:} Erinnern wir uns an (7) zurück. Dann ist (7) vereinigt mit allen (bezüglich \(\mathcal{T}_{ecl}\)) offenen Intervallen in \(\mathbb{R}\) ohne 0 eine Basis für die Topologie von \(X\).\\
+
+Auf dieser Grundlage definieren wir dann:\\[0.5cm]
+\textbf{Definition 1.7 (Abzählbarkeitsaxiome):} Sei \((X,\mathcal{T})\) ein topologischer Raum. Dann nennen wir \(X\):
+\begin{enumerate}
+    \item (Erstabzählbar \(:\Leftrightarrow \forall x \in X \, \exists \) abzählbare Umgebungsbasis),
+    \item (Zweitabzählbar \(:\Leftrightarrow \exists \) abzählbare (Sub-)Basis für \(\mathcal{T}\)).
+\end{enumerate}
+
+Exorbitant wichtig für die (Funktional-)Analysis ist das folgende Resultat:\\[0.5cm]
+\textbf{Satz 1.8 (Metrische Räume sind erstabzählbar):} Sei \((X,d_X)\) ein metrischer Raum. Dann ist \(X\) erstabzählbar (bezüglich der euklidischen Topologie).\\
+\textsc{Beweis:} Betrachte Bälle mit Radii \(\frac{1}{n}\) für \(n \in \mathbb{N}\). Dies ist eine abzählbare Umgebungsbasis für \(\mathcal{T}_{ecl}\). \QEDB
+
+\subsection{Stetigkeit}
+Für den in diesem Kapitel folgenden Vergleich zwischen Eigenschaften \(\mathcal{E}\) und \(\mathcal{E}_F\) wird der Konvergenzbegriff wichtig werden, der sich aber sehr analog aus der Begrifflichkeit in metrischen Räumen überträgt (das ist intuitiv auch wenig überraschend, wie wir gleich sehen werden):\\
+Sei \((X,\mathcal{T})\) ein topologischer Raum, \(x \in X, \, x_k \subset X\). Dann:
+\begin{equation}
+    (x_k \stackrel{k \to \infty}{\to} x \, :\Leftrightarrow \forall \text{ Umgebungen }U_x \, \exists N \in \mathbb{N} \, \forall n \geq N \, : \, x_k \in U).
+\end{equation}
+Wir werden nun \(Stet\) und \(Stet_F\) einführen und anschließend sehen, dass man allgemein zwischen diesen beiden Begriffen unterscheiden muss:\\[0.5cm]
+\textbf{Definition 1.9 (Stetigkeit):} Seien \((X,\mathcal{T}_X)\) und \((Y,\mathcal{T}_Y)\) topologische Räume. Betrachte eine Funktion \(f : X \to Y\). Dann nennen wir f:
+\begin{enumerate}
+    \item (stetig \(:\Leftrightarrow \, \forall A \in \mathcal{T}_Y \, : f^{-1}(A) \in \mathcal{T}_X\)),
+    \item (folgenstetig \(:\Leftrightarrow \, (x_k \stackrel{k \to \infty}{\to} x \, \Rightarrow \, f(x_k) \stackrel{k \to \infty}{\to} f(x))\)).
+\end{enumerate}
+
+\textbf{Bemerkung:} 
+\begin{itemize}
+\item Achtung! Die umgekehrte Aussage von (1.) können wir nicht als sinnvolle Defintion für Stetigkeit setzen (so etwas würde man in der Funktionalanalysis eine offene Abbildung nennen). Beispiel: Betrachte \(f : (\mathbb{R}, \mathcal{T}_{ecl}) \to (\mathbb{R}, \mathcal{T}_{ecl}),\)
+\begin{equation}
+    f(x) := x^2.
+\end{equation}
+Diese Funktion ist auch im topologischen Sinne stetig. Dafür reicht es, die Aussage für \(]a,b[\) zu zeigen, da die Vereinigung dieser Intervalle eine Basis für \(\mathcal{T}_{ecl}\) ist. Nun ist:
+\begin{equation}
+    f^{-1}(]a,b[) = \{x \, | \, x^2 \in ]a,b[\}.
+\end{equation}
+Diese Menge ist entweder leer oder eine offene Menge als (potentiell Vereinigung von) offenes/offenen Intervall/Intervallen (leicht zu zeigen). Allerdings ist \(f\) nicht offen:
+\begin{equation}
+    f(]-1,1[) = [0,1[.
+\end{equation}
+\item Intuitiv sollte man sich also Stetigkeit nicht bezüglich der "Nicht-Existenz von Sprüngen" vorstellen, sondern viel eher als "Erhaltung von Nähe". Das soll bedeuten, dass wir für je zwei nahe Punkte in \(X\) auch zwei nahe Punkte in \(Y\) erwarten. In metrischen Räumen dann speziell spiegelt sich diese Nähe in Form von "Sprüngen" wieder aufgrund der Metrisierung des Raumes.\\
+
+Nun wollen wir festhalten, wie \(Stet\) und \(Stet_F\) zusammenhängen (ohne Beweis, der hier zu weit führen würde; dient als Anregung einen Kurs über Topologie einmal zu besuchen!):\\[0.5cm]
+\textbf{Satz 1.10:} Betrachte zwei topologische Räume \((X,\mathcal{T}_X)\) und \((Y,\mathcal{T}_Y)\), sowie eine Funktion \(f : X \to Y\). Dann gilt:
+\begin{enumerate}
+    \item (\(f \text{ stetig }\Rightarrow \, f \text{ folgenstetig }\)),
+    \item Ist \(X\) erstabzählbar, so gilt \(\Leftrightarrow\) in (1.).
+\end{enumerate}
+\end{itemize}
+\section{Anwendung für die Maßtheorie}
+Wenn wir uns an Definition 1.9 in Analysis 3 (Lechner, WiSe 2023/24) erinnern, so war dort die Rede von der \(\sigma\)-Algebra, die von den offenen Teilmengen erzeugt wird. Hier war natürlich von nichts Anderem als einer Topologie die Rede. Genauer definieren wir:\\[0.5cm]
+\textbf{Definition 2.1 (Borel-\(\sigma\)-Algebra):} Sei \((X,\mathcal{T})\) ein topologischer Raum. Dann bezeichnen wir mit:
+\begin{equation}
+    \mathcal{B}(X) := \mathcal{B}(X,\mathcal{T}) := \sigma(\mathcal{T})
+\end{equation}
+die Borel-\(\sigma\)-Algebra über \(X\).\\
+
+Damit ist per Definition \(\mathcal{T} \subset \mathcal{B}(X)\). Denken wir nun zurück an Definition 1.4, so könnte folglich (berechtigt) die Frage aufkommen, wie sich dann (bezüglich der Teilraumtopologie) offene Mengen verhalten. Um diesen Zusammenhang korrekt zu lösen, halten wir fest:\\
+\textbf{Satz und Definition 2.2 (Teilraum-\(\sigma\)-Algebren):} Sei \((X,\Sigma)\) ein Messraum, \(A \in \mathcal{P}(X)\). Dann nennen wir:
+\begin{equation}
+    \Sigma | X := \{S \cap A \, | \, S \in \Sigma\}
+\end{equation}
+die Teilraum-\(\sigma\)-Algebra von \(\Sigma\) auf \(A\) (Dass dies tatsächlich eine \(\sigma\)-Algebra über \(A\) definiert, ist eine leichte Übungsaufgabe). Für einen topologischen Raum \((X,\mathcal{T})\), einer Teilmenge \(A \subseteq X\) (versehen mit \(\mathcal{T}_{sub}\)) gilt dann folglich:
+\begin{equation}
+    \mathcal{B}(A) = \mathcal{B}(X) | A.
+\end{equation}
+
+\textsc{Beweis:} Nach Definition ist (klarmachen!):
+\begin{equation}
+    \mathcal{T}_{sub} \subset \mathcal{B}(X) | A \, \land \, \mathcal{B}(A) \subset \mathcal{B}(X) | A.
+\end{equation}
+Die andere Inklusion folgt direkt aus dem Fakt, dass die \(\sigma\)-Algebra
+\begin{equation}
+    \{B \in \mathcal{B}(X) \, | \, B \cap A \in \mathcal{B}(A)\}
+\end{equation}
+\(\mathcal{T}\) und \(\mathcal{B}(X)\) enthält. Damit ist die Aussage bewiesen. \QEDB
+
+Es sei abschließend angemerkt, dass die Anwendungen von Topologie in der Maßtheorie noch viel weiterreichen. So ist man in der Existenztheorie im Bereich partieller Differentialgleichungen (PDE) sehr an "Konvergenz-Wechseln" interessiert. Damit ist grob (!) gesagt ein Wechsel der Topologie innerhalb der Konvergenz gemeint. Der Grund für dieses Interesse liegt an dem Problem, dass Existenztheorie klassischer Lösungen für "kompliziertere" PDE \textbf{sehr} schwierig im Allgemeinen ist. Man geht meistens einen Umweg, indem man sein Problem abschwächt und ein Kompaktheitsresultat erzielt (hier genau besagter Topologie-/Konvergenzwechsel) und limitisch zu dem klassischen Fall wieder übergeht. Für nähere Informationen bietet sich (mindestens) eine Vorlesung über Funktionalanalysis und PDE an.
+\end{document}
+
+
